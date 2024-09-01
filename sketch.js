@@ -1,14 +1,21 @@
 const WIDTH = 800;
 const HEIGHT = 800;
-const dt1 = 0.01;  // Smaller time step for better accuracy
-const steps1 = 1 / dt1;    // Use 1 step per frame to avoid excessive calculations
- 
-// const dt2 = 0.002;  // Larger time step for better performance
-// const steps2 = 1 / dt2;    // Use 1 step per frame to avoid excessive calculations
+let dt1 = 0.01;
+let steps1 = 1 / dt1;
 
-const MAX_TRAIL_POINTS = 100;
+let totalPendulums = 100;
+let angleDiff = 0.0001;
+let angle1 = Math.PI / 2;
+let angle2 = 0;
+let length1 = 180;
+let length2 = 180;
+let mass1 = 10;
+let mass2 = 10;
+
+let showPendulums = true;
+let running = false;
+
 let doublePendulums1 = [];
-// let doublePendulums2 = [];
 let trailGraphics;
 
 function setup() {
@@ -16,32 +23,132 @@ function setup() {
   colorMode(HSB, 360, 100, 100);
 
   trailGraphics = createGraphics(WIDTH, HEIGHT);
-  trailGraphics.background(0);  // Start with a black background
+  trailGraphics.background(0);
   trailGraphics.colorMode(HSB, 360, 100, 100);
 
-  let a1 = Math.random()* 2* PI //PI / 2;  // Initial angle 1
-  let a2 = Math.random() * 2 * PI //-PI / 4;  // Initial angle 2
-  let totalPendulums = 24;
-  let colorAngle = 360 / totalPendulums;
-  for (let i = 0; i < totalPendulums; i++) {
-    doublePendulums1.push(new DoublePendulum(WIDTH / 2, HEIGHT /2, 180, 180, 10, 10, a1, a2 + i * 0.0001, colorAngle * i));
-    //doublePendulums2.push(new DoublePendulum(WIDTH / 2, HEIGHT / 4 * 3, 100, 100, 10, 10, a1, a2 + i * 0.001, colorAngle * i));
-  }
+  // Initialize pendulums
+  reset();
+
+  // Function to check the "Show Pendulums" checkbox
+  const checkShowPendulums = () => {
+    document.getElementById('showPendulums').checked = true;
+    showPendulums = true;
+  };
+
+  // Attach event listeners to sliders
+  const sliders = [
+    'totalPendulums',
+    'angleDiff',
+    'angle1',
+    'angle2',
+    'length1',
+    'length2',
+    'mass1',
+    'mass2',
+  ];
+
+  sliders.forEach((slider) => {
+    document.getElementById(slider).addEventListener("input", (event) => {
+      document.getElementById(`${slider}-val`).textContent = event.target.value;
+    });
+  });
+
+  document.getElementById("showPendulums").addEventListener("change", (event) => {
+    showPendulums = event.target.checked;
+  });
+
+  // Play/Pause button functionality
+  const playPauseBtn = document.getElementById("playPauseBtn");
+
+  playPauseBtn.addEventListener("click", () => {
+    running = !running;
+    playPauseBtn.textContent = running ? "Pause" : "Play";
+    toggleSliders();
+  });
+
+  sliders.forEach((sliderId) => {
+    document.getElementById(sliderId).addEventListener('input', (event) => {
+      if (!running) {
+        const value = parseFloat(event.target.value);
+        switch (sliderId) {
+          case 'totalPendulums':
+            totalPendulums = parseInt(value);
+            break;
+          case 'angleDiff':
+            angleDiff = value;
+            break;
+          case 'angle1':
+            angle1 = value;
+            break;
+          case 'angle2':
+            angle2 = value;
+            break;
+          case 'length1':
+            length1 = value;
+            break;
+          case 'length2':
+            length2 = value;
+            break;
+          case 'mass1':
+            mass1 = value;
+            break;
+          case 'mass2':
+            mass2 = value;
+            break;
+        }
+        checkShowPendulums();
+        reset();
+      }
+    });
+  });
+
+  // Checkbox for showing pendulums
+  document.getElementById('showPendulums').addEventListener('change', (event) => {
+    showPendulums = event.target.checked;
+  });
+}
+
+function toggleSliders() {
+  const sliders = [
+    'totalPendulums',
+    'angleDiff',
+    'angle1',
+    'angle2',
+    'length1',
+    'length2',
+    'mass1',
+    'mass2',
+  ];
+
+  sliders.forEach((sliderId) => {
+    document.getElementById(sliderId).disabled = running;
+  });
 }
 
 function draw() {
   background(0);
-  image(trailGraphics, 0, 0);  // Draw the trail graphics on the main canvas
+  image(trailGraphics, 0, 0);
   if (frameCount % 5 == 0) {
-    trailGraphics.background(0, 0, 0, 0.1);  // Fade the trail graphics slightly
-  }
-  for (let i = 0; i < doublePendulums1.length; i++) {
-    doublePendulums1[i].update(dt1, steps1);
-    doublePendulums1[i].show(trailGraphics);  // Pass the trailGraphics to the show method
-    // doublePendulums2[i].update(dt2, steps2);
-    // doublePendulums2[i].show(trailGraphics);
+    trailGraphics.background(0, 0, 0, 0.1);
   }
 
+  if (running) {
+    for (let i = 0; i < doublePendulums1.length; i++) {
+      doublePendulums1[i].update(dt1, steps1);
+    }
+  }
+
+  for (let i = 0; i < doublePendulums1.length; i++) {
+    doublePendulums1[i].show(trailGraphics);
+  }
+}
+
+function reset() {
+  doublePendulums1 = [];
+  let colorAngle = 360 / totalPendulums;
+  for (let i = 0; i < totalPendulums; i++) {
+    doublePendulums1.push(new DoublePendulum(WIDTH / 2, HEIGHT / 2, length1, length2, mass1, mass2, angle1, angle2 + i * angleDiff, colorAngle * i));
+  }
 }
 
 class DoublePendulum {
@@ -59,11 +166,11 @@ class DoublePendulum {
     this.g = 1;
     this.colorAngle = colorAngle;
     this.history = [];
-    this.maxHistoryLength = 10; // Maximum number of points in the history
+    this.maxHistoryLength = 20; // Maximum number of points in the history
   }
 
   // Runge-Kutta integration method
-  update(dt,steps) {
+  update(dt, steps) {
     for (let i = 0; i < steps; i++) {
       const k1 = this.derivs(this.a1, this.a2, this.a1_v, this.a2_v);
       const k2 = this.derivs(this.a1 + 0.5 * k1.a1_a * dt, this.a2 + 0.5 * k1.a2_a * dt, this.a1_v + 0.5 * k1.a1_a * dt, this.a2_v + 0.5 * k1.a2_a * dt);
@@ -129,18 +236,19 @@ class DoublePendulum {
     trailGraphics.endShape();  // End shape without closing it
 
     //Optional: Draw the pendulums
-    // let x1 = this.l1 * sin(this.a1) + this.x;
-    // let y1 = this.l1 * cos(this.a1) + this.y;
-    // let x2 = x1 + this.l2 * sin(this.a2);
-    // let y2 = y1 + this.l2 * cos(this.a2);
+    if (showPendulums) {
+      let x1 = this.l1 * sin(this.a1) + this.x;
+      let y1 = this.l1 * cos(this.a1) + this.y;
+      let x2 = x1 + this.l2 * sin(this.a2);
+      let y2 = y1 + this.l2 * cos(this.a2);
 
-    // stroke(255);
-    // strokeWeight(2);
-    // line(this.x, this.y, x1, y1);
-    // line(x1, y1, x2, y2);
-    // fill(this.colorAngle, 100, 100);
-    // ellipse(x1, y1, this.m1);
-    // ellipse(x2, y2, this.m2);
+      stroke(255, 100);
+      strokeWeight(1);
+      line(this.x, this.y, x1, y1);
+      line(x1, y1, x2, y2);
+      fill(this.colorAngle, 100, 100, 100);
+      ellipse(x1, y1, this.m1*2);
+      ellipse(x2, y2, this.m2*2);
+    }
   }
-
 }

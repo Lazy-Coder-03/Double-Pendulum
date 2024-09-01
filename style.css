@@ -3,14 +3,170 @@ html, body {
   padding: 0;
   height: 100%;
   width: 100%;
+  overflow: hidden;
+  background-color: #000;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+main {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #000
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
 }
-canvas {
+
+.controls {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 15px;
+  border-radius: 10px;
+  width: 340px;
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   display: flex;
-  margin: auto;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.controls label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.controls input[type="range"] {
+  width: calc(100% - 30px);
+  margin-bottom: 5px;
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+.controls input[type="range"]::-webkit-slider-runnable-track {
+  height: 10px;
+  background: #333;
+  border-radius: 5px;
+}
+
+.controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background: #f39c12;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #e67e22;
+}
+
+.controls input[type="range"]::-moz-range-track {
+  height: 10px;
+  background: #333;
+  border-radius: 5px;
+}
+
+.controls input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: #f39c12;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #e67e22;
+}
+
+.controls input[type="range"]::-ms-track {
+  height: 10px;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+.controls input[type="range"]::-ms-fill-lower {
+  background: #333;
+  border-radius: 5px;
+}
+
+.controls input[type="range"]::-ms-fill-upper {
+  background: #333;
+  border-radius: 5px;
+}
+
+.controls input[type="range"]::-ms-thumb {
+  width: 24px;
+  height: 24px;
+  background: #f39c12;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #e67e22;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.controls input[type="checkbox"] {
+  margin-left: 5px;
+  transform: scale(1.2);
+}
+
+.controls button {
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.controls button:hover {
+  background-color: #555;
+}
+
+@media (max-width: 600px) {
+  .controls {
+    position: static;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .controls label {
+    font-size: 12px;
+  }
+
+  .controls input[type="range"] {
+    height: 8px;
+  }
+
+  .controls input[type="range"]::-webkit-slider-thumb,
+  .controls input[type="range"]::-moz-range-thumb,
+  .controls input[type="range"]::-ms-thumb {
+    width: 20px;
+    height: 20px;
+  }
+
+  .controls button {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
+
+canvas {
   border: 3px solid white;
   border-radius: 10px;
 }
