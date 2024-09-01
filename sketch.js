@@ -3,7 +3,7 @@ const HEIGHT = 800;
 let dt1 = 0.01;
 let steps1 = 1 / dt1;
 
-let totalPendulums = 100;
+let totalPendulums = 50;
 let angleDiff = 0.0001;
 let angle1 = Math.PI / 2;
 let angle2 = 0;
