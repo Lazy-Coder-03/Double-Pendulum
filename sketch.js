@@ -159,10 +159,10 @@ function draw() {
 
 
 
-    if (frameRate() < 30) {
-      fill(255);
-      text("Slow Frame Rate, try reducing Number of Pendulums", 25, 50);
-    }
+    // if (frameRate() < 30) {
+    //   fill(255);
+    //   text("Slow Frame Rate, try reducing Number of Pendulums", 25, 50);
+    // }
   }
 
   for (let i = 0; i < doublePendulums1.length; i++) {
