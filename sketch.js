@@ -1,10 +1,11 @@
 
 const WIDTH = 800;
 const HEIGHT = 800;
-let dt1 = 0.005;
-let steps1 = 1 / dt1;
 
-let totalPendulums = 50;
+let steps1 = 100;
+let dt1 = 1 / steps1;
+
+let totalPendulums = 51;
 let angleDiff = 0.0001;
 let angle1 = Math.PI / 2;
 let angle2 = 0;
@@ -30,12 +31,6 @@ function setup() {
   // Initialize pendulums
   reset();
 
-  // Function to check the "Show Pendulums" checkbox
-  const checkShowPendulums = () => {
-    document.getElementById('showPendulums').checked = true;
-    showPendulums = true;
-  };
-
   // Attach event listeners to sliders
   const sliders = [
     'totalPendulums',
@@ -48,55 +43,41 @@ function setup() {
     'mass2',
   ];
 
-  sliders.forEach((slider) => {
-    document.getElementById(slider).addEventListener("input", (event) => {
-      document.getElementById(`${slider}-val`).textContent = event.target.value;
-    });
-  });
-
-  document.getElementById("showPendulums").addEventListener("change", (event) => {
-    showPendulums = event.target.checked;
-  });
-
-  // Play/Pause button functionality
-  const playPauseBtn = document.getElementById("playPauseBtn");
-
-  playPauseBtn.addEventListener("click", () => {
-    running = !running;
-    playPauseBtn.textContent = running ? "Pause" : "Play";
-    toggleSliders();
-  });
-
   sliders.forEach((sliderId) => {
-    document.getElementById(sliderId).addEventListener('input', (event) => {
+    const sliderElement = document.getElementById(sliderId);
+    sliderElement.addEventListener("input", (event) => {
+      const value = parseFloat(event.target.value);
+      document.getElementById(`${sliderId}-val`).textContent = value;
+
+      switch (sliderId) {
+        case 'totalPendulums':
+          totalPendulums = parseInt(value);
+          updateStepsAndDt();
+          break;
+        case 'angleDiff':
+          angleDiff = value;
+          break;
+        case 'angle1':
+          angle1 = value;
+          break;
+        case 'angle2':
+          angle2 = value;
+          break;
+        case 'length1':
+          length1 = value;
+          break;
+        case 'length2':
+          length2 = value;
+          break;
+        case 'mass1':
+          mass1 = value;
+          break;
+        case 'mass2':
+          mass2 = value;
+          break;
+      }
+
       if (!running) {
-        const value = parseFloat(event.target.value);
-        switch (sliderId) {
-          case 'totalPendulums':
-            totalPendulums = parseInt(value);
-            break;
-          case 'angleDiff':
-            angleDiff = value;
-            break;
-          case 'angle1':
-            angle1 = value;
-            break;
-          case 'angle2':
-            angle2 = value;
-            break;
-          case 'length1':
-            length1 = value;
-            break;
-          case 'length2':
-            length2 = value;
-            break;
-          case 'mass1':
-            mass1 = value;
-            break;
-          case 'mass2':
-            mass2 = value;
-            break;
-        }
         checkShowPendulums();
         reset();
       }
@@ -107,6 +88,32 @@ function setup() {
   document.getElementById('showPendulums').addEventListener('change', (event) => {
     showPendulums = event.target.checked;
   });
+
+  // Play/Pause button functionality
+  const playPauseBtn = document.getElementById("playPauseBtn");
+  playPauseBtn.addEventListener("click", () => {
+    running = !running;
+    playPauseBtn.textContent = running ? "Pause" : "Play";
+    toggleSliders();
+  });
+}
+
+function updateStepsAndDt() {
+
+  if (totalPendulums < 10) {
+    steps1 = 5000;
+  } else {
+    let mappedsteps1 = 5000 / totalPendulums;
+    steps1 = Math.round(mappedsteps1/10) * 10;
+
+  }
+  dt1 = (1 / steps1).toFixed(4);
+  console.log(`Steps: ${steps1}, dt1: ${dt1}`); // For debugging
+}
+
+function checkShowPendulums() {
+  document.getElementById('showPendulums').checked = true;
+  showPendulums = true;
 }
 
 function toggleSliders() {
@@ -136,28 +143,13 @@ function draw() {
       fill(255);
     }
   }
-  if (!running && totalPendulums <= 10) {
-    dt1 = 0.001;
-    steps1 = 1 / dt1;
 
-  }else if (!running && totalPendulums > 10 && totalPendulums <= 30) {
-    dt1 = 0.002;
-    steps1 = 1 / dt1;
-  } else if (!running && totalPendulums > 30 && totalPendulums <= 50) {
-    dt1 = 0.004;
-    steps1 = 1 / dt1;
-  } else if (!running && totalPendulums > 50 && totalPendulums <= 100) {
-    dt1 = 0.0075;
-    steps1 = 1 / dt1;
-  } else if (!running && totalPendulums > 100 && totalPendulums <= 150) {
-    dt1 = 0.0125;
-    steps1 = 1 / dt1;
-  }
 
 
   // textSize(25);
   // fill(255);
   // text('dt: ' + dt1, 25, 25);
+  // text('steps: ' + steps1, 25, 50);
 
  
   if (running) {
