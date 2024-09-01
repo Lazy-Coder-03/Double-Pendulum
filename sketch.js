@@ -1,6 +1,6 @@
 const WIDTH = 800;
 const HEIGHT = 800;
-let dt1 = 0.01;
+let dt1 = 0.005;
 let steps1 = 1 / dt1;
 
 let totalPendulums = 50;
@@ -141,6 +141,13 @@ function draw() {
   for (let i = 0; i < doublePendulums1.length; i++) {
     doublePendulums1[i].show(trailGraphics);
   }
+  if (!running) {
+    fill(255);
+    textSize(50);
+    text('Simulation Paused', 25, 75);
+    textSize(25);
+    text('NOTE:\nYou can Change Parameters when Simulation is paused, \nChanging Parameters will reset the Sketch,\nYou cannot change parameters while running.', 25, 125);
+  }
 }
 
 function reset() {
@@ -166,7 +173,7 @@ class DoublePendulum {
     this.g = 1;
     this.colorAngle = colorAngle;
     this.history = [];
-    this.maxHistoryLength = 20; // Maximum number of points in the history
+    this.maxHistoryLength = 5; // Maximum number of points in the history
   }
 
   // Runge-Kutta integration method

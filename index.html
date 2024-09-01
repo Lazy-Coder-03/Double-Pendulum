@@ -10,29 +10,29 @@
   <body>
     <main>
       <div class="controls top-right">
-        <label for="totalPendulums">Total Pendulums:</label>
+        <label for="totalPendulums">Total Pendulums(Imapacts Performance) : <span id="totalPendulums-val">100</span></label>
         <input
           type="range"
           id="totalPendulums"
           min="10"
-          max="200"
+          max="150"
           step="10"
-          value="50"
+          value="100"
         />
-        <span id="totalPendulums-val">50</span>
+        
 
-        <label for="angleDiff">Angle Difference:</label>
+        <label for="angleDiff">Starting Angle Difference : <span id="angleDiff-val">0.0001</span></label>
         <input
           type="range"
           id="angleDiff"
           min="0.0001"
-          max="0.001"
+          max="0.01"
           step="0.0001"
           value="0.0001"
         />
-        <span id="angleDiff-val">0.0001</span>
+        
 
-        <label for="angle1">Angle 1:</label>
+        <label for="angle1">Angle 1 : <span id="angle1-val">1.57</span></label>
         <input
           type="range"
           id="angle1"
@@ -41,9 +41,9 @@
           step="0.01"
           value="1.57"
         />
-        <span id="angle1-val">1.57</span>
+        
 
-        <label for="angle2">Angle 2:</label>
+        <label for="angle2">Angle 2 : <span id="angle2-val">0</span></label>
         <input
           type="range"
           id="angle2"
@@ -52,9 +52,9 @@
           step="0.01"
           value="0"
         />
-        <span id="angle2-val">0</span>
+        
 
-        <label for="length1">Length 1:</label>
+        <label for="length1">Length 1 : <span id="length1-val">180</span></label>
         <input
           type="range"
           id="length1"
@@ -63,9 +63,9 @@
           step="10"
           value="180"
         />
-        <span id="length1-val">180</span>
+        
 
-        <label for="length2">Length 2:</label>
+        <label for="length2">Length 2 : <span id="length2-val">180</span></label>
         <input
           type="range"
           id="length2"
@@ -74,15 +74,15 @@
           step="10"
           value="180"
         />
-        <span id="length2-val">180</span>
+        
 
-        <label for="mass1">Mass 1:</label>
+        <label for="mass1">Mass 1 : <span id="mass1-val">10</span></label>
         <input type="range" id="mass1" min="5" max="30" step="1" value="10" />
-        <span id="mass1-val">10</span>
+        
 
-        <label for="mass2">Mass 2:</label>
+        <label for="mass2">Mass 2 : <span id="mass2-val">10</span></label>
         <input type="range" id="mass2" min="5" max="30" step="1" value="10" />
-        <span id="mass2-val">10</span>
+        
 
 
         <!-- Checkbox and Button -->

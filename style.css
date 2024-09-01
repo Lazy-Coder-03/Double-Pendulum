@@ -107,27 +107,9 @@ main {
   border: 2px solid #e67e22;
 }
 
-
 .controls input[type="range"]:disabled {
-  background: #555; /* Grey background for the track */
-}
-
-.controls input[type="range"]:disabled::-webkit-slider-thumb {
-  background: #888; /* Grey color for the thumb */
-  border-color: #666; /* Darker grey for the border */
-  cursor: not-allowed; /* Change cursor to indicate disabled state */
-}
-
-.controls input[type="range"]:disabled::-moz-range-thumb {
-  background: #888; /* Grey color for the thumb */
-  border-color: #666; /* Darker grey for the border */
-  cursor: not-allowed; /* Change cursor to indicate disabled state */
-}
-
-.controls input[type="range"]:disabled::-ms-thumb {
-  background: #888; /* Grey color for the thumb */
-  border-color: #666; /* Darker grey for the border */
-  cursor: not-allowed; /* Change cursor to indicate disabled state */
+  opacity: 0.5;
+  background: #555;
 }
 
 .checkbox-wrapper {
@@ -157,9 +139,27 @@ main {
   background-color: #555;
 }
 
-
-
 canvas {
   border: 3px solid white;
   border-radius: 10px;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 768px) {
+  .controls {
+    position: static;
+    width: 100%;
+    max-height: none;
+    margin-top: 15px;
+    padding: 10px;
+    box-shadow: none;
+  }
+  
+  main {
+    padding-bottom: 15px; /* Add padding to avoid overlap with controls */
+  }
+
+  .controls input[type="range"] {
+    width: 100%; /* Make the slider full width on mobile */
+  }
 }
