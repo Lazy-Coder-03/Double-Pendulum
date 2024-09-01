@@ -1,3 +1,4 @@
+
 const WIDTH = 800;
 const HEIGHT = 800;
 let dt1 = 0.005;
@@ -21,7 +22,7 @@ let trailGraphics;
 function setup() {
   createCanvas(WIDTH, HEIGHT);
   colorMode(HSB, 360, 100, 100);
-
+  frameRate(120);
   trailGraphics = createGraphics(WIDTH, HEIGHT);
   trailGraphics.background(0);
   trailGraphics.colorMode(HSB, 360, 100, 100);
@@ -130,11 +131,45 @@ function draw() {
   image(trailGraphics, 0, 0);
   if (frameCount % 5 == 0) {
     trailGraphics.background(0, 0, 0, 0.1);
+    if (running) {
+      textSize(25);
+      fill(255);
+    }
+  }
+  if (!running && totalPendulums <= 10) {
+    dt1 = 0.001;
+    steps1 = 1 / dt1;
+
+  }else if (!running && totalPendulums > 10 && totalPendulums <= 30) {
+    dt1 = 0.002;
+    steps1 = 1 / dt1;
+  } else if (!running && totalPendulums > 30 && totalPendulums <= 50) {
+    dt1 = 0.004;
+    steps1 = 1 / dt1;
+  } else if (!running && totalPendulums > 50 && totalPendulums <= 100) {
+    dt1 = 0.0075;
+    steps1 = 1 / dt1;
+  } else if (!running && totalPendulums > 100 && totalPendulums <= 150) {
+    dt1 = 0.0125;
+    steps1 = 1 / dt1;
   }
 
+
+  // textSize(25);
+  // fill(255);
+  // text('dt: ' + dt1, 25, 25);
+
+ 
   if (running) {
     for (let i = 0; i < doublePendulums1.length; i++) {
       doublePendulums1[i].update(dt1, steps1);
+    }
+
+
+
+    if (frameRate() < 30) {
+      fill(255);
+      text("Slow Frame Rate, try reducing Number of Pendulums", 25, 50);
     }
   }
 
@@ -142,6 +177,7 @@ function draw() {
     doublePendulums1[i].show(trailGraphics);
   }
   if (!running) {
+    //trailGraphics.background(0, 0, 0, 0.1);
     fill(255);
     textSize(50);
     text('Simulation Paused', 25, 75);
@@ -173,7 +209,7 @@ class DoublePendulum {
     this.g = 1;
     this.colorAngle = colorAngle;
     this.history = [];
-    this.maxHistoryLength = 5; // Maximum number of points in the history
+    this.maxHistoryLength = 20; // Maximum number of points in the history
   }
 
   // Runge-Kutta integration method
